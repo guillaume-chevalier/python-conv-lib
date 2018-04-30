@@ -39,10 +39,13 @@ Result:
     [3, 42]
     [42, 42]
 
-More info:
+Unit Tests:
 ----------
+::
 
-A ``convolved_2d`` function also exists, and the ``convolved`` function is also aliased as ``convolved_1d``. See unit tests for more examples.
+    python setup.py test
+
+A ``convolved_2d`` function also exists. See tests for more examples.
 
 
 Notes
