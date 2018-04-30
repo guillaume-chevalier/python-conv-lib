@@ -1,13 +1,11 @@
-from distutils.core import setup
+from setuptools import setup
+# from distutils.core import setup
 
 
 with open('README.rst') as _f:
     _README_RST = _f.read()
 
 _VERSION = '0.1'
-
-# 'test_convolved_1d.py',
-# 'test_convolved_2d.py',
 
 
 setup(
@@ -36,7 +34,10 @@ setup(
     download_url='https://github.com/guillaume-chevalier/python-conv-lib/tarball/{}'.format(_VERSION),
     author='Guillaume Chevalier',
     author_email='guillaume-chevalier@outlook.com',
-    py_modules=['conv'],
+    packages=['conv'],
+    test_suite='nose.collector',
+    tests_require=['nose', 'nose-cover3'],
+    include_package_data=True,
     license='MIT',
     keywords='convolution conv conv1d conv2d convolve convolved'
 )

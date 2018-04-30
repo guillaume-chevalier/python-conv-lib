@@ -1,4 +1,5 @@
 from unittest import TestCase
+import unittest
 
 from conv import convolved_1d
 
@@ -104,3 +105,7 @@ class TestConvolved1D(TestCase):
         result = tuple(result)
 
         self.assertEqual(expected, result)
+
+
+if __name__ == '__main__':
+    unittest.main()

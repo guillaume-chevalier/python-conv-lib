@@ -1,4 +1,5 @@
 from unittest import TestCase
+import unittest
 import itertools
 
 from conv import convolved_2d
@@ -42,3 +43,7 @@ class TestConvolved2D(TestCase):
         print(expected)
 
         self.assertEqual(expected, result)
+
+
+if __name__ == '__main__':
+    unittest.main()

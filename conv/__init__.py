@@ -107,15 +107,17 @@ def dimensionize(maybe_a_list, nd=2):
 
 
 def convolved_2d(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
+    # return range(10)
     kernel_size = dimensionize(kernel_size, nd=2)
     stride = dimensionize(stride, nd=2)
     padding = dimensionize(padding, nd=2)
-    final_list = []
 
-    for row_packet in convolved_1d(iterable, kernel_size[0], stride[0], padding[0], default_value):
+    for row_packet in convolved(iterable, kernel_size[0], stride[0], padding[0], default_value):
         transposed_inner = []
         for col in tuple(row_packet):
-            transposed_inner.append(list(convolved_1d(iterable, kernel_size[1], stride[1], padding[1], default_value)))
+            transposed_inner.append(list(
+                convolved(col, kernel_size[1], stride[1], padding[1], default_value)
+            ))
 
         if len(transposed_inner) > 0:
             for col_i in range(len(transposed_inner[0])):
