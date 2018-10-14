@@ -35,9 +35,15 @@ https://github.com/guillaume-chevalier/python-conv-lib
 
 
 def convolved(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
-    """Iterate on an iterable so as to get every convolution window per loop iteration.
+    """Iterable to get every convolution window per loop iteration.
 
-    For example, `convolved([1, 2, 3, 4], kernel_size=2)` will produce the following result: `[1, 2], [2, 3], [3, 4]`.
+    For example:
+        `convolved([1, 2, 3, 4], kernel_size=2)` 
+            will produce the following result:
+            `[[1, 2], [2, 3], [3, 4]]`.
+        `convolved([1, 2, 3], kernel_size=2, stride=1, padding=2, default_value=42)` 
+            will produce the following result:
+            `[[42, 42], [42, 1], [1, 2], [2, 3], [3, 42], [42, 42]]`
 
     Arguments:
         iterable: An object to iterate on. It should support slice indexing if `padding == 0`.
