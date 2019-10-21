@@ -5,7 +5,7 @@ from setuptools import setup
 with open('README.rst') as _f:
     _README_RST = _f.read()
 
-_VERSION = '0.1'
+_VERSION = '0.2'
 
 
 setup(
@@ -15,7 +15,7 @@ setup(
                 'passes on your iterable objects (e.g.: on a list).',
     long_description=_README_RST,
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         'Intended Audience :: Information Technology',
@@ -35,8 +35,8 @@ setup(
     author='Guillaume Chevalier',
     author_email='guillaume-chevalier@outlook.com',
     packages=['conv'],
-    test_suite='nose.collector',
-    tests_require=['nose', 'nose-cover3'],
+    test_suite="testing",
+    tests_require=["pytest", "pytest-cov"],
     include_package_data=True,
     license='MIT',
     keywords='convolution conv conv1d conv2d convolve convolved'

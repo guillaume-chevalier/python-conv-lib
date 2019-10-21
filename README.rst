@@ -40,7 +40,7 @@ Result:
     [42, 42]
 
 Unit Tests:
-----------
+-----------
 ::
 
     python setup.py test

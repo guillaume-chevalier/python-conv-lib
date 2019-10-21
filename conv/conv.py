@@ -1,6 +1,5 @@
 """A module to loop on iterables, with convolutional style."""
 
-
 __author__ = "Guillaume Chevalier"
 __license__ = """
 MIT License
@@ -34,7 +33,7 @@ https://github.com/guillaume-chevalier/python-conv-lib
 """
 
 
-def convolved(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
+def convolved(iterable, kernel_size=1, stride=1, padding=0, default_value=None, include_incomplete_pass=False):
     """Iterable to get every convolution window per loop iteration.
 
     For example:
@@ -53,6 +52,8 @@ def convolved(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
             how many values we add with `default_value` on the borders. If it is a string, `SAME` means that the
             convolution will add some padding according to the kernel_size, and `VALID` is the same as
             specifying `padding=0`.
+        include_incomplete_pass: suppose you have a kernel_size of 7 and an iterable length of 3. If
+            include_incomplete_pass is set to True, then you'll have 1 item returned in the loop, otherwise, 0 item.
         default_value: Default fill value for padding and values outside iteration range.
     """
     # Input validation and error messages
@@ -78,12 +79,12 @@ def convolved(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
         elif padding == 'VALID':
             padding = 0
     if not type(iterable) == list:
-        iterable = list(iterable)
+        iterable = list(iterable)  # TODO: don't cast as list. Chain iter or something like that instead.
 
     # Add padding to iterable
     if padding > 0:
         pad = [default_value] * padding
-        iterable = pad + list(iterable) + pad
+        iterable = pad + list(iterable) + pad  # TODO: don't cast as list. Chain iter or something like that instead.
 
     # Fill missing value to the right
     remainder = (kernel_size - len(iterable)) % stride
@@ -91,15 +92,24 @@ def convolved(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
     iterable = iterable + extra_pad
 
     i = 0
+    has_passed_once = False
     while True:
+        # If not the end or not the end but
         if i > len(iterable) - kernel_size:
-            break
+            if not include_incomplete_pass or has_passed_once:
+                break
+
+            if i < len(iterable):
+                has_passed_once = True
+            else:
+                break
+
         yield iterable[i:i + kernel_size]
         i += stride
 
 
-def convolved_1d(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
-    return convolved(iterable, kernel_size, stride, padding, default_value)
+def convolved_1d(iterable, kernel_size=1, stride=1, padding=0, default_value=None, include_incomplete_pass=False):
+    return convolved(iterable, kernel_size, stride, padding, default_value, include_incomplete_pass)
 
 
 def dimensionize(maybe_a_list, nd=2):
@@ -112,17 +122,18 @@ def dimensionize(maybe_a_list, nd=2):
         return maybe_a_list
 
 
-def convolved_2d(iterable, kernel_size=1, stride=1, padding=0, default_value=None):
+def convolved_2d(iterable, kernel_size=1, stride=1, padding=0, default_value=None, include_incomplete_pass=False):
     # return range(10)
     kernel_size = dimensionize(kernel_size, nd=2)
     stride = dimensionize(stride, nd=2)
     padding = dimensionize(padding, nd=2)
 
-    for row_packet in convolved(iterable, kernel_size[0], stride[0], padding[0], default_value):
+    for row_packet in convolved(iterable, kernel_size[0], stride[0], padding[0], default_value,
+                                include_incomplete_pass):
         transposed_inner = []
         for col in tuple(row_packet):
             transposed_inner.append(list(
-                convolved(col, kernel_size[1], stride[1], padding[1], default_value)
+                convolved(col, kernel_size[1], stride[1], padding[1], default_value, include_incomplete_pass)
             ))
 
         if len(transposed_inner) > 0:

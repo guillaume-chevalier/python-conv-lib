@@ -106,6 +106,36 @@ class TestConvolved1D(TestCase):
 
         self.assertEqual(expected, result)
 
+    def test_big_kernel_loops_once(self):
+        expected = tuple(range(3))
+        result = []
+
+        for kernel_hover in convolved_1d(expected, kernel_size=7, padding=0, stride=1, default_value=None,
+                                         include_incomplete_pass=True):
+            result.append(kernel_hover)
+
+        self.assertEqual(len(result), 1)
+
+    def test_big_kernel_loops_twice(self):
+        expected = tuple(range(7 + 3))
+        result = []
+
+        for kernel_hover in convolved_1d(expected, kernel_size=7, padding=0, stride=7, default_value=None,
+                                         include_incomplete_pass=True):
+            result.append(kernel_hover)
+
+        self.assertEqual(len(result), 2)
+
+    def test_big_kernel_loops_never(self):
+        expected = []
+        result = []
+
+        for kernel_hover in convolved_1d(expected, kernel_size=7, padding=0, stride=7, default_value=None,
+                                         include_incomplete_pass=True):
+            result.append(kernel_hover)
+
+        self.assertEqual(len(result), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
